@@ -1,0 +1,35 @@
+.App {
+  text-align: center;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.counter {
+  width: 200px;
+  height: 300px;
+  border: 2px solid #0af6ca;
+  border-radius: 10px;
+}
+
+.progress-bar {
+  background-color: #ddd;
+  height: 20px;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.progress-bar > div {
+  background-image: linear-gradient(to right, #4CAF50, #8BC34A);
+  transition: width 0.3s ease-in-out;
+  height: 100%;
+}
+
+.count {
+  padding: 20px;
+}
+
+.wrapper_button {
+  padding: 30px;
+  display: flex;
+  justify-content: space-around;
+}
