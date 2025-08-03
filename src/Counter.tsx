@@ -1,46 +1,68 @@
-import {useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import {Button} from "./Button";
-import {ProgressBar} from "./ProgressBar";
-import {Count}  from "./Count";
+// import {ProgressBar} from "./ProgressBar";
+// import {Count}  from "./Count";
+
+type Props = {
+    maxValue: number;
+    startValue: number;
+    errorMessage:  string;
+    maxValueInputActive: boolean;
+    startValuesInputActive:  boolean;
+    counterHasChanged: () => void;
+}
+
+export const Counter = ({
+    maxValue,
+    startValue,
+    errorMessage,
+    maxValueInputActive,
+    startValuesInputActive,
+    counterHasChanged
+} : Props) => {
 
 
+    const [count, setCount] = useState(startValue);
 
-export const Counter = () => {
-
-    const startCount = 0;
-    // const  maxCount= 5;
-    const [count, setCount] = useState(startCount);
-    const maxCount = useRef(10);
-    function generateRandomNumber() {
-        return Math.floor(Math.random() * 100) + 1;
-    }
+    useEffect(() => {
+        setCount(startValue);
+    }, [startValue]);
 
 
     const inc = () => {
-        if (count < maxCount.current) {
+        if (count < maxValue) {
             setCount(count + 1)
+            counterHasChanged()
         }
     };
 
     const reset = () => {
-            setCount(startCount);
-            maxCount.current = generateRandomNumber();
+            setCount(startValue);
     };
 
+    const isMaxValueReached =  count === maxValue;
 
-    // const isMaxValueReached =  count === maxCount;
-
+    const conditionsIncDisabled = maxValueInputActive || startValuesInputActive || count >= maxValue
+    const conditionsResetDisabled =   maxValueInputActive || startValuesInputActive || count === startValue
     return (
-
-        <div className="counter">
-
-
-            <Count count={count} maxCount={maxCount.current}/>
-            <ProgressBar count={count} maxCount={maxCount.current}/>
+        <div className="wrapper_set">
+            <div className="wrapper_setValue">
+                {errorMessage ? (
+                    <div className="error">
+                        {errorMessage}
+                    </div>
+                ) : startValuesInputActive || maxValueInputActive ? (
+                    <div>Enter values and press 'set'</div>
+                ) : isMaxValueReached ? (
+                    <p style={{color: "red"}}>Maximum value reached!</p>
+                ) : (
+                    <div className="count">{count}</div>
+                )}
+            </div>
 
             <div className="wrapper_button">
-                <Button title={" inc "} onClick={() => inc()} disabled={count >= maxCount.current}/>
-                <Button title={" reset "} onClick={() => reset()} disabled={count === 0}/>
+                <Button title={" inc "} onClick={inc} disabled={conditionsIncDisabled}/>
+                <Button title={" reset "} onClick={reset} disabled={conditionsResetDisabled}/>
             </div>
         </div>
     );
